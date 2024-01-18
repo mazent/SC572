@@ -167,11 +167,11 @@ volatile uint8_t glUVCHeader[CY_FX_UVC_MAX_HEADER] =
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00  /* Source clock reference field */
 };
 
-volatile static CyBool_t hitFV = CyFalse;               /* Whether end of frame (FV) signal has been hit. */
-volatile static CyBool_t gpif_initialized = CyFalse;    /* Whether the GPIF init function has been called. */
-volatile static uint16_t prodCount = 0, consCount = 0;  /* Count of buffers received and committed during
+static volatile CyBool_t hitFV = CyFalse;               /* Whether end of frame (FV) signal has been hit. */
+static volatile CyBool_t gpif_initialized = CyFalse;    /* Whether the GPIF init function has been called. */
+static volatile uint16_t prodCount = 0, consCount = 0;  /* Count of buffers received and committed during
                                                            the current video frame. */
-volatile static CyBool_t gotPartial = CyFalse;          /* Helps track the last partial buffer to make sure it is committed to USB.*/
+static volatile CyBool_t gotPartial = CyFalse;          /* Helps track the last partial buffer to make sure it is committed to USB.*/
 static CyBool_t glStillCaptureStart = CyFalse;			/* Flag that indicate the start of Still Image Capture action. */
 static CyBool_t glStillCaptureFinish = CyFalse;			/* Flag that indicate the end of Still Image Capture action. */
 static uint8_t glCaptureFrame = 0;						/* Frame number in Capture phase (we must capture the third frame)  */
@@ -233,8 +233,8 @@ static CyBool_t LP_Mode = CyFalse;					/* It signals whether we are in Low Power
 /* Defines and variables for application Frame Timer */
 #ifdef FRAME_TIMER
 #define TIMER_PERIOD	(500)
-volatile static CyBool_t UvcAbort = CyFalse;
-volatile static CyBool_t UvcTimerStarted = CyFalse;
+static volatile CyBool_t UvcAbort = CyFalse;
+static volatile CyBool_t UvcTimerStarted = CyFalse;
 static CyU3PTimer        UvcTimer;
 #endif
 
@@ -248,6 +248,9 @@ CyU3PReturnStatus_t myCyU3PDebugPrint (uint8_t priority, char *message)
 
 #ifdef DEBUG_PRINT
 	apiRetStatus = CyU3PDebugPrint (priority, message);
+#else
+	INUTILE(priority);
+	INUTILE(message);
 #endif
 
 	return apiRetStatus;
@@ -257,6 +260,8 @@ CyU3PReturnStatus_t myCyU3PDebugPrint (uint8_t priority, char *message)
 #ifdef FRAME_TIMER
 static void UvcAppProgressTimer (uint32_t arg)
 {
+	INUTILE(arg);
+
     /* This frame has taken too long to complete. Abort it, so that the next frame can be started. */
     UvcAbort = CyTrue;
 }
@@ -422,6 +427,8 @@ void CyFxAppErrorHandler(
 		CyU3PReturnStatus_t apiRetStatus  /* API return status */
 		)
 {
+	INUTILE(apiRetStatus);
+
     /* This function is hit when we have hit a critical application error. This is not
        expected to happen, and the current implementation of this function does nothing
        except stay in a loop printing error messages through the UART port.
@@ -460,6 +467,8 @@ static void CyFxUVCApplnUSBEventCB (
         uint16_t             	evdata  /* Event data */
         )
 {
+	INUTILE(evdata);
+
     switch (evtype)
     {
         case CY_U3P_USB_EVENT_RESET:
@@ -651,6 +660,9 @@ static CyBool_t CyFxUVCApplnUSBSetupCB (
  */
 void CyFxUvcApplnDmaCallback (CyU3PDmaMultiChannel *multiChHandle, CyU3PDmaCbType_t type,CyU3PDmaCBInput_t *input)
 {
+	INUTILE(multiChHandle);
+	INUTILE(input);
+
     if (type == CY_U3P_DMA_CB_CONS_EVENT)
     {
         consCount++;
@@ -724,6 +736,8 @@ static uint8_t CyFxUvcAppCommitEOF (CyU3PDmaMultiChannel *handle,           /* H
  * pins is detected */
 void CyFxGpioCB(uint8_t gpioId)
 {
+	INUTILE(gpioId);
+
 	CyU3PBusyWait(10);		/* Wait 10 us to debounce */
 
 	/* Write the global variables with the state of the pins EN_FRONT_CAM_GPIO, EN_REAR_CAM_GPIO, EN_FLASH_GPIO */
@@ -2914,6 +2928,8 @@ void UVCAppEP0Thread_Entry(uint32_t input)
 {
     uint32_t eventMask = (CY_FX_UVC_VIDEO_CONTROL_REQUEST_EVENT | CY_FX_UVC_VIDEO_STREAM_REQUEST_EVENT);
     uint32_t eventFlag;
+
+    INUTILE(input);
 
 #ifdef USB_DEBUG_INTERFACE
     CyU3PReturnStatus_t apiRetStatus;

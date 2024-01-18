@@ -13,6 +13,8 @@
 #ifndef _INCLUDED_CYFXUVCAPP_H_
 #define _INCLUDED_CYFXUVCAPP_H_
 
+#define INUTILE(x)          (void) (x)
+
 #include <cyu3types.h>
 #include <cyu3usbconst.h>
 #include <cyu3externcstart.h>
