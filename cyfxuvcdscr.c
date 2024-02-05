@@ -129,7 +129,7 @@ const uint8_t CyFxUSBManufactureDscr[] =
 /* Standard Product String Descriptor */
 const uint8_t CyFxUSBProductDscr[] =
     {
-        0x24+4,                           /* Descriptor Size */
+        0x24,                           /* Descriptor Size */
         CY_U3P_USB_STRING_DESCR,        /* Device Descriptor Type */
         'T',0x00,
         'E',0x00,
@@ -145,11 +145,9 @@ const uint8_t CyFxUSBProductDscr[] =
         'v',0x00,
         '_',0x00,
         'v',0x00,						/* Firmware Revision */
-        '1',0x00,
+        '2',0x00,
         '.',0x00,
-        '6',0x00,
-        '.',0x00,
-        '1',0x00
+        '0',0x00,
     };
 
 
